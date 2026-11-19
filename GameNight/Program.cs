@@ -30,6 +30,7 @@ if(history.Length == 0)
 else
 {
     System.Console.WriteLine($"Nights played: {history.Length}");
+    //foreach because I want to list out every line.
     foreach(string line in history)
     {
         System.Console.WriteLine($"  {line}");
@@ -52,7 +53,7 @@ string[] points = File.ReadAllLines(POINTS_FILE);
 //writes out the player points heading
 System.Console.WriteLine($"{"PLAYER".PadRight(11)}POINTS");
 int i = 0;
-//writes out each persons score and name
+//foreach because it writes out each persons score and name
 foreach(string line in players)
 {
  System.Console.WriteLine($"{line.PadRight(11)}{points[i]}");  
@@ -68,11 +69,13 @@ int season = TotalPoints(points);
 // Part 2 ===============================================================================================================================================
 i = 0;
 string[] pointsTonight = new string[players.Length];
+//foreach because I want to write out (and read) to every line in the array
 foreach(string line in players)
 {
     System.Console.Write($"Points tonight for {players[i]}: ");
     
     int newPoints = Convert.ToInt32(Console.ReadLine());
+    //while loop because I want to constantly check that the input is valid before doing calculations
     while(newPoints < 0 || newPoints > MAX_POINTS)
     {
         System.Console.WriteLine("A score must be between 0 and 20.");
@@ -115,6 +118,7 @@ static int LeaderIndex(string[] points)
 {
     int highPoint = 0;
     int leaderIndex = 0;
+    //for loop beause I want to do something with each line in the array
     for(int i = 0; i < points.Length; i++)
     {
         int currentPoint = Convert.ToInt32(points[i]);
@@ -133,6 +137,7 @@ static int TotalPoints(string[] points)
 {
     int i = 0;
     int total = 0;
+    //foreach because I am just adding every line, I am not doing anything with individual ones.
     foreach(string line in points)
     {
         total = Convert.ToInt32(points[i]) + total;
