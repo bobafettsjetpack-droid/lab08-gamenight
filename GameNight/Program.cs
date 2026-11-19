@@ -56,7 +56,7 @@ foreach(string line in players)
     points[i] = Convert.ToString(Convert.ToInt32(points[i]) + newPoints);
     pointsTonight[i] = Convert.ToString(newPoints);
     //season = Convert.ToInt32(points[i]);
-    //points[i] = season.ToString();
+    //points[i] = season.ToString(); these didn't work with my code and I had written it before seeing that you wanted the seasons variable
     i++;
 
 }
@@ -67,9 +67,27 @@ int leaderTonight = LeaderIndex(pointsTonight);
 int highScoreTonight = HighestPoints(pointsTonight);
 System.Console.WriteLine($"Tonights winner is {players[leaderTonight]} with {highScoreTonight}");
 
+//Part 3 =======================================================================================================================================
 
+System.Console.WriteLine("=== GAME NIGHT LEADERBOARD ===");
 
+string[] history = File.ReadAllLines(HISTORY_FILE);
 
+if(history.Length == 0)
+{
+    System.Console.WriteLine("No nights played yet");
+}
+else
+{
+    System.Console.WriteLine($"Nights played: {history.Length}");
+    foreach(string night in history)
+    {
+        System.Console.WriteLine($"  {night}");
+    }
+}
+
+int tonightNumber = history.Length;
+System.Console.WriteLine($"Tonight is Night {tonightNumber}.");
 
 
 //Methods ===================================================================================================================================================
@@ -119,6 +137,5 @@ static int TotalPoints(string[] points)
     return total;
 }
 
-/*
+
 static string HistoryEntry(int night, string winner, int points)
-*/
