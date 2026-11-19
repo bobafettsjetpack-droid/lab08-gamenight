@@ -7,17 +7,43 @@
 */
 
 using System.Security;
+// Look for the data files next to Program.cs, however the program is started.
+string projectFolder = Path.GetFullPath(
+Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
+Directory.SetCurrentDirectory(projectFolder);
 
-// PART 1 =======================================================================================================================================================
 const string PLAYERS_FILE = "players.txt";
 const string POINTS_FILE = "points.txt";
 const string HISTORY_FILE = "history.txt";
 const int MAX_POINTS = 20;
 
-// Look for the data files next to Program.cs, however the program is started.
-string projectFolder = Path.GetFullPath(
-Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
-Directory.SetCurrentDirectory(projectFolder);
+System.Console.WriteLine("=== GAME NIGHT LEADERBOARD ===");
+
+//Part 3 =======================================================================================================================================
+string[] history = File.ReadAllLines(HISTORY_FILE);
+// if else because it needs to check if there is no entry into the history file, else it does something different.
+if(history.Length == 0)
+{
+    System.Console.WriteLine("No nights played yet.");
+    System.Console.WriteLine("Tonight is Night 1.\n");
+}
+else
+{
+    System.Console.WriteLine($"Nights played: {history.Length}");
+    foreach(string line in history)
+    {
+        System.Console.WriteLine($"  {line}");
+    }
+    System.Console.WriteLine($"Tonight is night {history.Length + 1}\n");
+}
+
+
+
+
+// PART 1 =======================================================================================================================================================
+
+
+
 
 //reads the files into arrays
 string[] players = File.ReadAllLines(PLAYERS_FILE);
@@ -36,7 +62,7 @@ foreach(string line in players)
 //writes the leader part
 int leader = LeaderIndex(points);
 System.Console.WriteLine($"Leader: {players[leader]} with {points[leader]}");
-System.Console.WriteLine($"Season total: {TotalPoints(points)}");
+System.Console.WriteLine($"Season total: {TotalPoints(points)}\n");
 int season = TotalPoints(points);
 
 // Part 2 ===============================================================================================================================================
@@ -64,58 +90,26 @@ foreach(string line in players)
 File.WriteAllLines(POINTS_FILE, points);
 
 int leaderTonight = LeaderIndex(pointsTonight);
-int highScoreTonight = HighestPoints(pointsTonight);
-System.Console.WriteLine($"Tonights winner is {players[leaderTonight]} with {highScoreTonight}");
+//int highScoreTonight = HighestPoints(pointsTonight);
+int highScoreTonight = Convert.ToInt32(pointsTonight[leaderTonight]);
+System.Console.WriteLine($"Tonights winner is {players[leaderTonight]} with {highScoreTonight}\n");
 
-//Part 3 =======================================================================================================================================
-
-System.Console.WriteLine("=== GAME NIGHT LEADERBOARD ===");
-
-string[] history = File.ReadAllLines(HISTORY_FILE);
-
-if(history.Length == 0)
-{
-    System.Console.WriteLine("No nights played yet");
-}
-else
-{
-    System.Console.WriteLine($"Nights played: {history.Length}");
-    foreach(string night in history)
-    {
-        System.Console.WriteLine($"  {night}");
-    }
-}
-
+//the rest of part 3 =================================
 int tonightNumber = history.Length;
-System.Console.WriteLine($"Tonight is Night {tonightNumber}.");
 
 string winnerTonight = players[leaderTonight];
 int bestTonight = Convert.ToInt32(pointsTonight[leaderTonight]);
 
+System.Console.WriteLine("Saved points.txt");
+
 string[] entry = { HistoryEntry(tonightNumber, winnerTonight, bestTonight) };
-
-
+System.Console.WriteLine($"Added to history.txt: {entry[0]}");
 
 
 File.AppendAllLines(HISTORY_FILE, entry);
 
 
 //Methods ===================================================================================================================================================
-static int HighestPoints(string[] points)
-{
-    int highPoint = 0;
-    for(int i = 1; i < points.Length; i++)
-    {
-        int currentPoint = Convert.ToInt32(points[i]);
-        if (currentPoint > highPoint)
-        {
-            highPoint = currentPoint;
-            
-        }
-    }
-    return highPoint;
-}
-
 
 static int LeaderIndex(string[] points)
 {
@@ -150,6 +144,6 @@ static int TotalPoints(string[] points)
 
 static string HistoryEntry(int night, string winner, int points)
 {
-    string output = $"Night {night}: {winner} won with {points} points";
+    string output = $"Night {night + 1}: {winner} won with {points} points";
     return output;
 }
