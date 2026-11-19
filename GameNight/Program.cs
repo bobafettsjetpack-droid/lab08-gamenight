@@ -47,7 +47,7 @@ foreach(string line in players)
     System.Console.Write($"Points tonight for {players[i]}: ");
     
     int newPoints = Convert.ToInt32(Console.ReadLine());
-    while(newPoints < 0 || newPoints > 20)
+    while(newPoints < 0 || newPoints > MAX_POINTS)
     {
         System.Console.WriteLine("A score must be between 0 and 20.");
         System.Console.Write($"Points tonight for {players[i]}: ");
@@ -88,6 +88,16 @@ else
 
 int tonightNumber = history.Length;
 System.Console.WriteLine($"Tonight is Night {tonightNumber}.");
+
+string winnerTonight = players[leaderTonight];
+int bestTonight = Convert.ToInt32(pointsTonight[leaderTonight]);
+
+string[] entry = { HistoryEntry(tonightNumber, winnerTonight, bestTonight) };
+
+
+
+
+File.AppendAllLines(HISTORY_FILE, entry);
 
 
 //Methods ===================================================================================================================================================
@@ -139,3 +149,7 @@ static int TotalPoints(string[] points)
 
 
 static string HistoryEntry(int night, string winner, int points)
+{
+    string output = $"Night {night}: {winner} won with {points} points";
+    return output;
+}
